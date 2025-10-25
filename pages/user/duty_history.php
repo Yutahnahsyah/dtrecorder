@@ -86,7 +86,7 @@ try {
             <input type="hidden" name="status" id="statusInput" value="<?= htmlspecialchars($status_filter) ?>" />
 
             <button type="submit"
-              class="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded-lg text-sm shadow-md hover:shadow-lg">
+              class="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded-lg text-sm shadow-lg hover:shadow-lg">
               Filter
             </button>
 

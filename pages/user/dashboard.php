@@ -19,7 +19,6 @@ $stmtAssignedIds = $pdo->prepare($sqlAssignedIds);
 $stmtAssignedIds->execute(['student_id' => $userId]);
 $assignedIds = $stmtAssignedIds->fetchAll(PDO::FETCH_COLUMN);
 
-
 $totalSeconds = 0;
 
 if (!empty($assignedIds)) {
@@ -40,7 +39,6 @@ if (!empty($assignedIds)) {
     $totalSeconds += (int) $row['duration_seconds'];
   }
 }
-
 
 $hours = floor($totalSeconds / 3600);
 $minutes = floor(($totalSeconds % 3600) / 60);

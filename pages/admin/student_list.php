@@ -114,8 +114,9 @@ $message = $_GET['message'] ?? '';
                           value="<?= htmlspecialchars($student['assigned_id']) ?>" />
                         <select name="department_id" onchange="this.form.submit()"
                           class="font-medium rounded-md border px-2 py-1 w-full">
+                          <option value="" <?= !isset($student['department_id']) || $student['department_id'] === null || $student['department_id'] === '' ? 'selected' : '' ?>>Unassigned</option>
                           <?php foreach ($departments as $dept): ?>
-                            <option value="<?= $dept['id'] ?>" <?= $dept['department_name'] === $student['department_name'] ? 'selected' : '' ?>>
+                            <option value="<?= $dept['id'] ?>" <?= (string) ($student['department_id'] ?? '') === (string) $dept['id'] ? 'selected' : '' ?>>
                               <?= htmlspecialchars($dept['department_name']) ?>
                             </option>
                           <?php endforeach; ?>
@@ -129,8 +130,9 @@ $message = $_GET['message'] ?? '';
                           value="<?= htmlspecialchars($student['assigned_id']) ?>" />
                         <select name="scholarship_id" onchange="this.form.submit()"
                           class="font-medium rounded-md border px-2 py-1 w-full">
+                          <option value="" <?= !isset($student['scholarship_id']) || $student['scholarship_id'] === null || $student['scholarship_id'] === '' ? 'selected' : '' ?>>Unassigned</option>
                           <?php foreach ($scholarships as $sch): ?>
-                            <option value="<?= $sch['id'] ?>" <?= $sch['scholarship_name'] === $student['scholarship_name'] ? 'selected' : '' ?>>
+                            <option value="<?= $sch['id'] ?>" <?= (string) ($student['scholarship_id'] ?? '') === (string) $sch['id'] ? 'selected' : '' ?>>
                               <?= htmlspecialchars($sch['scholarship_name']) ?>
                             </option>
                           <?php endforeach; ?>

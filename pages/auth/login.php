@@ -26,8 +26,7 @@
           <label for="username" class="block text-sm font-medium leading-6 text-gray-900">Student ID / Email Address /
             Username</label>
           <div class="mt-2">
-            <input id="username" type="text" name="username" 
-                title="Must not start with a space" required
+            <input id="username" type="text" name="username" title="Must not start with a space" required
               class="block w-full rounded-md border-0 px-3 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" />
           </div>
         </div>
@@ -41,11 +40,22 @@
             </div>
           </div>
 
-          <div class="mt-2">
-            <input id="password" type="password" name="password" pattern="^[A-Z][A-Za-z\s]*"
-                title="Must not start with a space" required
-              class="block w-full rounded-md border-0 px-3 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" />
+          <div class="mt-2 relative">
+            <input id="password" type="password" name="password" pattern="^[A-Za-z][A-Za-z\s]*"
+              title="Must not start with a space" required
+              class="block w-full rounded-md border-0 px-3 py-1.5 pr-10 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" />
+
+            <button type="button" onclick="togglePassword()" tabindex="-1"
+              class="absolute inset-y-0 right-0 flex items-center px-3 text-gray-500 hover:text-gray-700">
+              <svg id="eyeIcon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                stroke="currentColor" class="w-5 h-5">
+                <path stroke-linecap="round" stroke-linejoin="round"
+                  d="M3.98 8.223a.75.75 0 0 0-.01.977A10.45 10.45 0 0 0 12 15.75c3.07 0 5.83-1.37 8.03-3.55a.75.75 0 0 0-.01-.977A10.45 10.45 0 0 0 12 8.25c-3.07 0-5.83 1.37-8.02 3.55z" />
+                <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0z" />
+              </svg>
+            </button>
           </div>
+
         </div>
 
         <div>
@@ -71,5 +81,19 @@
     </div>
   </div>
 </body>
+
+<script>
+  function togglePassword() {
+    const passwordInput = document.getElementById('password');
+    const eyeIcon = document.getElementById('eyeIcon');
+
+    const isHidden = passwordInput.type === 'password';
+    passwordInput.type = isHidden ? 'text' : 'password';
+
+    eyeIcon.innerHTML = isHidden
+      ? `<path stroke-linecap="round" stroke-linejoin="round" d="M3 3l18 18M9.88 9.88a3 3 0 0 0 4.24 4.24M6.1 6.1a10.45 10.45 0 0 0-2.12 2.12.75.75 0 0 0-.01.977A10.45 10.45 0 0 0 12 15.75c1.54 0 3-.35 4.33-.97M17.9 17.9a10.45 10.45 0 0 0 2.12-2.12.75.75 0 0 0-.01-.977A10.45 10.45 0 0 0 12 8.25c-1.54 0-3 .35-4.33.97" />`
+      : `<path stroke-linecap="round" stroke-linejoin="round" d="M3.98 8.223a.75.75 0 0 0-.01.977A10.45 10.45 0 0 0 12 15.75c3.07 0 5.83-1.37 8.03-3.55a.75.75 0 0 0-.01-.977A10.45 10.45 0 0 0 12 8.25c-3.07 0-5.83 1.37-8.02 3.55z" /><path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0z" />`;
+  }
+</script>
 
 </html>

@@ -57,12 +57,12 @@ require_once __DIR__ . '/../../config/student_information_handler.php';
             <div>
               <label class="block text-sm font-medium text-gray-900">Student ID</label>
               <input type="text" name="student_id" value="<?= htmlspecialchars($user_data['student_id']) ?>" disabled
-                class="mt-2 block w-full rounded-md border-0 px-3 py-1.5 text-gray-900 bg-gray-100 shadow-sm ring-1 ring-gray-300 focus:ring-2 focus:ring-indigo-600 sm:text-sm" />
+                class="mt-2 block w-full rounded-md border-0 px-3 py-1.5 text-gray-900 bg-gray-100 shadow-sm ring-1 ring-gray-300 sm:text-sm" />
             </div>
             <div>
               <label class="block text-sm font-medium text-gray-900">Email</label>
               <input type="email" name="email" value="<?= htmlspecialchars($user_data['email']) ?>" disabled
-                class="mt-2 block w-full rounded-md border-0 px-3 py-1.5 text-gray-900 bg-gray-100 shadow-sm ring-1 ring-gray-300 focus:ring-2 focus:ring-indigo-600 sm:text-sm" />
+                class="mt-2 block w-full rounded-md border-0 px-3 py-1.5 text-gray-900 bg-gray-100 shadow-sm ring-1 ring-gray-300 sm:text-sm" />
             </div>
           </div>
 
