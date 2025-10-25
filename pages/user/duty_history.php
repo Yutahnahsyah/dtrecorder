@@ -6,7 +6,7 @@ $status_filter = $_GET['status'] ?? '';
 $duty_logs = [];
 
 try {
-$sql = "
+  $sql = "
   SELECT dr.duty_date, dr.time_in, dr.time_out, dr.remarks, dr.status,
          a.username AS admin_name
   FROM duty_requests dr
@@ -110,54 +110,56 @@ $sql = "
 
             <button type="button" onclick="window.location.href='duty_history.php'"
               class="px-4 py-2 rounded-lg text-sm font-semibold bg-gray-300 text-gray-800 hover:bg-gray-400 shadow-md">
-              Clear
+              Default
             </button>
           </form>
         </div>
 
-        <div class="overflow-hidden rounded-xl border">
-          <table class="min-w-full text-sm text-left">
-            <thead class="bg-gray-100 border-b text-gray-600">
-              <tr>
-                <th class="py-3 px-4 font-bold">Assigned Department</th>
-                <th class="py-3 px-4 font-bold">Date</th>
-                <th class="py-3 px-4 font-bold">Time In</th>
-                <th class="py-3 px-4 font-bold">Time Out</th>
-                <th class="py-3 px-4 font-bold">Task Description</th>
-                <th class="py-3 px-4 font-bold text-center">Status</th>
-              </tr>
-            </thead>
-            <tbody>
-              <?php foreach ($duty_logs as $log): ?>
-                <tr class="border-b hover:bg-gray-100">
-                  <td class="py-3 px-4 font-medium"><?= htmlspecialchars($log['admin_name']) ?></td>
-                  <td class="py-3 px-4 font-medium"><?= htmlspecialchars($log['duty_date']) ?></td>
-                  <td class="py-3 px-4 font-medium"><?= htmlspecialchars($log['time_in']) ?></td>
-                  <td class="py-3 px-4 font-medium"><?= htmlspecialchars($log['time_out']) ?></td>
-                  <td class="py-3 px-4 font-medium"><?= htmlspecialchars($log['remarks']) ?></td>
-                  <td class="py-3 px-4 flex justify-center">
-                    <?php
-                    $status = $log['status'];
-                    $badgeClass = match ($status) {
-                      'approved' => 'bg-green-100 text-green-700',
-                      'rejected' => 'bg-red-100 text-red-700',
-                      'pending' => 'bg-yellow-100 text-yellow-700',
-                      default => 'bg-gray-100 text-gray-700'
-                    };
-                    ?>
-                    <span class="px-3 py-1 rounded-full text-xs font-semibold <?= $badgeClass ?>">
-                      <?= ucfirst($status) ?>
-                    </span>
-                  </td>
-                </tr>
-              <?php endforeach; ?>
-              <?php if (empty($duty_logs)): ?>
+        <div class="rounded-xl border overflow-hidden">
+          <div class="max-h-[483px] overflow-y-auto">
+            <table class="min-w-full text-sm text-left">
+              <thead class="bg-gray-100 border-b text-gray-600 sticky top-0 z-10">
                 <tr>
-                  <td colspan="7" class="py-3 px-4 text-center text-gray-500">No duty logs found.</td>
+                  <th class="py-3 px-4 font-bold">Assigned Department</th>
+                  <th class="py-3 px-4 font-bold">Date</th>
+                  <th class="py-3 px-4 font-bold">Time In</th>
+                  <th class="py-3 px-4 font-bold">Time Out</th>
+                  <th class="py-3 px-4 font-bold">Task Description</th>
+                  <th class="py-3 px-4 font-bold text-center">Status</th>
                 </tr>
-              <?php endif; ?>
-            </tbody>
-          </table>
+              </thead>
+              <tbody>
+                <?php foreach ($duty_logs as $log): ?>
+                  <tr class="border-b hover:bg-gray-100">
+                    <td class="py-3 px-4 font-medium"><?= htmlspecialchars($log['admin_name']) ?></td>
+                    <td class="py-3 px-4 font-medium"><?= htmlspecialchars($log['duty_date']) ?></td>
+                    <td class="py-3 px-4 font-medium"><?= htmlspecialchars($log['time_in']) ?></td>
+                    <td class="py-3 px-4 font-medium"><?= htmlspecialchars($log['time_out']) ?></td>
+                    <td class="py-3 px-4 font-medium"><?= htmlspecialchars($log['remarks']) ?></td>
+                    <td class="py-3 px-4 flex justify-center">
+                      <?php
+                      $status = $log['status'];
+                      $badgeClass = match ($status) {
+                        'approved' => 'bg-green-100 text-green-700',
+                        'rejected' => 'bg-red-100 text-red-700',
+                        'pending' => 'bg-yellow-100 text-yellow-700',
+                        default => 'bg-gray-100 text-gray-700'
+                      };
+                      ?>
+                      <span class="px-3 py-1 rounded-full text-xs font-semibold <?= $badgeClass ?>">
+                        <?= ucfirst($status) ?>
+                      </span>
+                    </td>
+                  </tr>
+                <?php endforeach; ?>
+                <?php if (empty($duty_logs)): ?>
+                  <tr>
+                    <td colspan="7" class="py-3 px-4 text-center text-gray-500">No duty logs found.</td>
+                  </tr>
+                <?php endif; ?>
+              </tbody>
+            </table>
+          </div>
         </div>
       </div>
     </div>

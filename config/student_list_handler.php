@@ -59,7 +59,7 @@ LIMIT 1
       $pdo->commit();
 
       $message = ($stmt_delete->rowCount() > 0)
-        ? "Student [{$student_id_display}] successfully removed from " . htmlspecialchars($admin_identifier)
+        ? "Student [{$student_id_display}] successfully removed from " . htmlspecialchars($admin_identifier) . "."
         : "Assignment not found or already deleted.";
 
     } catch (PDOException $e) {

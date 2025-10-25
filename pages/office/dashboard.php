@@ -23,7 +23,7 @@ require_once __DIR__ . '/../../includes/auth_admin.php';
             <?php echo htmlspecialchars($logged_in_admin); ?>
           </h2>
         </div>
-        
+
         <nav class="p-4 space-y-2">
           <a href="dashboard.php"
             class="block px-4 py-2 bg-gray-200 rounded-lg font-medium hover:bg-gray-300">Dashboard</a>
@@ -39,9 +39,28 @@ require_once __DIR__ . '/../../includes/auth_admin.php';
     </div>
 
     <div class="flex-1 p-8 overflow-y-auto">
-      <!-- Dashboard Contents -->
+      <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-10">
+        <div class="bg-white p-6 rounded-xl shadow-sm border-l-4 border-purple-500">
+          <h3 class="text-gray-500 text-sm font-semibold">Total Student Count</h3>
+          <p class="text-3xl font-bold mt-2 text-purple-600">Placeholder</p>
+        </div>
+
+        <div class="bg-white p-6 rounded-xl shadow-sm border-l-4 border-red-500">
+          <h3 class="text-gray-500 text-sm font-semibold">Rejected Duty Logs</h3>
+          <p class="text-3xl font-bold mt-2 text-red-600">Placeholder</p>
+        </div>
+
+        <div class="bg-white p-6 rounded-xl shadow-sm border-l-4 border-yellow-500">
+          <h3 class="text-gray-500 text-sm font-semibold">Pending Duty Logs</h3>
+          <p class="text-3xl font-bold mt-2 text-yellow-600">Placeholder</p>
+        </div>
+
+        <div class="bg-white p-6 rounded-xl shadow-sm border-l-4 border-green-500">
+          <h3 class="text-gray-500 text-sm font-semibold">Completed Duty Logs</h3>
+          <p class="text-3xl font-bold mt-2 text-green-600">Placeholder</p>
+        </div>
+      </div>
     </div>
-  </div>
 </body>
 
 </html>

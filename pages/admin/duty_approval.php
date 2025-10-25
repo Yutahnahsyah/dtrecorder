@@ -61,7 +61,7 @@ $message = $_GET['message'] ?? '';
 
             <button type="button" onclick="window.location.href='duty_approval.php'"
               class="bg-gray-300 hover:bg-gray-400 text-gray-800 font-semibold py-2 px-4 rounded-lg text-sm shadow-md hover:shadow-lg">
-              Clear
+              Default
             </button>
           </form>
         </div>
@@ -73,56 +73,52 @@ $message = $_GET['message'] ?? '';
           </div>
         <?php endif; ?>
 
-        <div class="overflow-hidden rounded-xl border">
-          <table class="min-w-full text-sm text-left" id="studentTable">
-            <thead class="bg-gray-100 border-b text-gray-600">
-              <tr>
-                <th class="py-3 px-4 font-bold">Student Name</th>
-                <th class="py-3 px-4 font-bold">Student ID</th>
-                <th class="py-3 px-4 font-bold">Date</th>
-                <th class="py-3 px-4 font-bold">Time In</th>
-                <th class="py-3 px-4 font-bold">Time Out</th>
-                <th class="py-3 px-4 font-bold">Task Description</th>
-                <th class="py-3 px-4 font-bold text-center">Action</th>
-              </tr>
-            </thead>
-            <tbody>
-              <?php if (count($pending_requests) > 0): ?>
-                <?php foreach ($pending_requests as $request): ?>
-                  <?php $fullName = htmlspecialchars(trim("{$request['last_name']}, {$request['first_name']}, {$request['middle_name']}")); ?>
-                  <tr class="border-b hover:bg-gray-100 duty-row">
-                    <td class="py-3 px-4 font-medium"><?php echo $fullName; ?></td>
-                    <td class="py-3 px-4 font-medium"><?php echo htmlspecialchars($request['student_id']); ?>
-                    </td>
-                    <td class="py-3 px-4 font-medium"><?php echo htmlspecialchars($request['duty_date']); ?>
-                    </td>
-                    <td class="py-3 px-4 font-medium"><?php echo htmlspecialchars($request['time_in']); ?>
-                    </td>
-                    <td class="py-3 px-4 font-medium"><?php echo htmlspecialchars($request['time_out']); ?>
-                    </td>
-                    <td class="py-3 px-4 font-medium"><?php echo htmlspecialchars($request['remarks']); ?>
-                    </td>
-                    <td class="py-3 px-2 flex justify-center space-x-2">
-                      <a href="../../config/duty_approval_handler.php?action=approve&id=<?php echo $request['id']; ?>"
-                        class="bg-green-500 hover:bg-green-600 text-white font-semibold py-1 px-3 rounded-lg text-xs">
-                        Approve
-                      </a>
-                      <a href="../../config/duty_approval_handler.php?action=reject&id=<?php echo $request['id']; ?>"
-                        class="bg-red-500 hover:bg-red-600 text-white font-semibold py-1 px-3 rounded-lg text-xs">
-                        Reject
-                      </a>
-                    </td>
-                  </tr>
-                <?php endforeach; ?>
-              <?php else: ?>
+        <div class="rounded-xl border overflow-hidden">
+          <div class="max-h-[483px] overflow-y-auto">
+            <table class="min-w-full text-sm text-left">
+              <thead class="bg-gray-100 border-b text-gray-600 sticky top-0 z-10">
                 <tr>
-                  <td colspan="7" class="py-3 px-4 text-center text-gray-500">No pending duty requests.</td>
+                  <th class="py-3 px-4 font-bold">Student Name</th>
+                  <th class="py-3 px-4 font-bold">Student ID</th>
+                  <th class="py-3 px-4 font-bold">Date</th>
+                  <th class="py-3 px-4 font-bold">Time In</th>
+                  <th class="py-3 px-4 font-bold">Time Out</th>
+                  <th class="py-3 px-4 font-bold">Task Description</th>
+                  <th class="py-3 px-4 font-bold text-center">Action</th>
                 </tr>
-              <?php endif; ?>
-            </tbody>
-          </table>
+              </thead>
+              <tbody>
+                <?php if (count($pending_requests) > 0): ?>
+                  <?php foreach ($pending_requests as $request): ?>
+                    <?php $fullName = htmlspecialchars(trim("{$request['last_name']}, {$request['first_name']}, {$request['middle_name']}")); ?>
+                    <tr class="border-b hover:bg-gray-100 duty-row">
+                      <td class="py-3 px-4 font-medium"><?php echo $fullName; ?></td>
+                      <td class="py-3 px-4 font-medium"><?php echo htmlspecialchars($request['student_id']); ?></td>
+                      <td class="py-3 px-4 font-medium"><?php echo htmlspecialchars($request['duty_date']); ?></td>
+                      <td class="py-3 px-4 font-medium"><?php echo htmlspecialchars($request['time_in']); ?></td>
+                      <td class="py-3 px-4 font-medium"><?php echo htmlspecialchars($request['time_out']); ?></td>
+                      <td class="py-3 px-4 font-medium"><?php echo htmlspecialchars($request['remarks']); ?></td>
+                      <td class="py-3 px-2 flex justify-center space-x-2">
+                        <a href="../../config/duty_approval_handler.php?action=approve&id=<?php echo $request['id']; ?>"
+                          class="bg-green-500 hover:bg-green-600 text-white font-semibold py-1 px-3 rounded-lg text-xs">
+                          Approve
+                        </a>
+                        <a href="../../config/duty_approval_handler.php?action=reject&id=<?php echo $request['id']; ?>"
+                          class="bg-red-500 hover:bg-red-600 text-white font-semibold py-1 px-3 rounded-lg text-xs">
+                          Reject
+                        </a>
+                      </td>
+                    </tr>
+                  <?php endforeach; ?>
+                <?php else: ?>
+                  <tr>
+                    <td colspan="7" class="py-3 px-4 text-center text-gray-500">No pending duty requests.</td>
+                  </tr>
+                <?php endif; ?>
+              </tbody>
+            </table>
+          </div>
         </div>
-
       </div>
     </div>
   </div>

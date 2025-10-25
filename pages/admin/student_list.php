@@ -69,7 +69,7 @@ $message = $_GET['message'] ?? '';
 
             <button type="button" onclick="window.location.href='student_list.php'"
               class="bg-gray-300 hover:bg-gray-400 text-gray-800 font-semibold py-2 px-4 rounded-lg text-sm shadow-md hover:shadow-lg">
-              Clear
+              Default
             </button>
           </form>
         </div>
@@ -81,81 +81,85 @@ $message = $_GET['message'] ?? '';
           </div>
         <?php endif; ?>
 
-        <div class="overflow-hidden rounded-xl border">
-          <table class="min-w-full text-sm text-left" id="studentTable">
-            <thead class="bg-gray-100 border-b text-gray-600">
-              <tr>
-                <th class="py-3 px-4 font-bold">Student Name</th>
-                <th class="py-3 px-4 font-bold">Student ID</th>
-                <th class="py-3 px-4 font-bold">Department</th>
-                <th class="py-3 px-4 font-bold">Scholarship</th>
-                <th class="py-3 px-4 font-bold">Total Duty Time</th>
-                <th class="py-3 px-4 font-bold">Action</th>
-              </tr>
-            </thead>
-            <tbody>
-              <?php
-              $found = false;
-              foreach ($current_admin_students as $student):
-                if (!empty($search_id) && stripos($student['student_id'], $search_id) === false)
-                  continue;
-                $found = true;
-                $fullName = htmlspecialchars(trim("{$student['last_name']}, {$student['first_name']} {$student['middle_name']}"));
-                ?>
-                <tr class="border-b hover:bg-gray-100 student-row"
-                  data-student-id="<?= htmlspecialchars($student['student_id']) ?>">
-                  <td class="py-3 px-4 font-medium"><?= $fullName ?></td>
-                  <td class="py-3 px-4 font-medium"><?= htmlspecialchars($student['student_id']) ?></td>
-                  <td class="py-3 px-4">
-                    <form method="POST" action="student_list.php">
-                      <input type="hidden" name="action_type" value="update" />
-                      <input type="hidden" name="assigned_id" value="<?= htmlspecialchars($student['assigned_id']) ?>" />
-                      <select name="department_id" onchange="this.form.submit()"
-                        class="font-medium rounded-md border px-2 py-1 w-full">
-                        <?php foreach ($departments as $dept): ?>
-                          <option value="<?= $dept['id'] ?>" <?= $dept['department_name'] === $student['department_name'] ? 'selected' : '' ?>>
-                            <?= htmlspecialchars($dept['department_name']) ?>
-                          </option>
-                        <?php endforeach; ?>
-                      </select>
-                    </form>
-                  </td>
-                  <td class="py-3 px-4">
-                    <form method="POST" action="student_list.php">
-                      <input type="hidden" name="action_type" value="update" />
-                      <input type="hidden" name="assigned_id" value="<?= htmlspecialchars($student['assigned_id']) ?>" />
-                      <select name="scholarship_id" onchange="this.form.submit()"
-                        class="font-medium rounded-md border px-2 py-1 w-full">
-                        <?php foreach ($scholarships as $sch): ?>
-                          <option value="<?= $sch['id'] ?>" <?= $sch['scholarship_name'] === $student['scholarship_name'] ? 'selected' : '' ?>>
-                            <?= htmlspecialchars($sch['scholarship_name']) ?>
-                          </option>
-                        <?php endforeach; ?>
-                      </select>
-                    </form>
-                  </td>
-                  <?php
-                  $totalMinutes = intval($student['total_minutes'] ?? 0);
-                  $hours = floor($totalMinutes / 60);
-                  $minutes = $totalMinutes % 60;
-                  ?>
-                  <td class="py-3 px-4 font-medium"><?= "{$hours} hrs {$minutes} mins" ?></td>
-                  <td class="py-3 px-1 flex">
-                    <a href="student_list.php?action_type=delete&assigned_id=<?= htmlspecialchars($student['assigned_id']) ?>"
-                      onclick="return confirmDelete('<?= addslashes($fullName) ?>')"
-                      class="bg-red-500 hover:bg-red-600 text-white font-semibold py-1 px-3 rounded-lg text-xs">
-                      Remove
-                    </a>
-                  </td>
-                </tr>
-              <?php endforeach; ?>
-              <?php if (!$found): ?>
+        <div class="rounded-xl border overflow-hidden">
+          <div class="max-h-[483px] overflow-y-auto">
+            <table class="min-w-full text-sm text-left">
+              <thead class="bg-gray-100 border-b text-gray-600 sticky top-0 z-10">
                 <tr>
-                  <td colspan="6" class="py-3 px-4 text-center text-gray-500">No students found.</td>
+                  <th class="py-3 px-4 font-bold">Student Name</th>
+                  <th class="py-3 px-4 font-bold">Student ID</th>
+                  <th class="py-3 px-4 font-bold">Department</th>
+                  <th class="py-3 px-4 font-bold">Scholarship</th>
+                  <th class="py-3 px-4 font-bold">Total Duty Time</th>
+                  <th class="py-3 px-4 font-bold">Action</th>
                 </tr>
-              <?php endif; ?>
-            </tbody>
-          </table>
+              </thead>
+              <tbody>
+                <?php
+                $found = false;
+                foreach ($current_admin_students as $student):
+                  if (!empty($search_id) && stripos($student['student_id'], $search_id) === false)
+                    continue;
+                  $found = true;
+                  $fullName = htmlspecialchars(trim("{$student['last_name']}, {$student['first_name']} {$student['middle_name']}"));
+                  ?>
+                  <tr class="border-b hover:bg-gray-100 student-row"
+                    data-student-id="<?= htmlspecialchars($student['student_id']) ?>">
+                    <td class="py-3 px-4 font-medium"><?= $fullName ?></td>
+                    <td class="py-3 px-4 font-medium"><?= htmlspecialchars($student['student_id']) ?></td>
+                    <td class="py-3 px-4">
+                      <form method="POST" action="student_list.php">
+                        <input type="hidden" name="action_type" value="update" />
+                        <input type="hidden" name="assigned_id"
+                          value="<?= htmlspecialchars($student['assigned_id']) ?>" />
+                        <select name="department_id" onchange="this.form.submit()"
+                          class="font-medium rounded-md border px-2 py-1 w-full">
+                          <?php foreach ($departments as $dept): ?>
+                            <option value="<?= $dept['id'] ?>" <?= $dept['department_name'] === $student['department_name'] ? 'selected' : '' ?>>
+                              <?= htmlspecialchars($dept['department_name']) ?>
+                            </option>
+                          <?php endforeach; ?>
+                        </select>
+                      </form>
+                    </td>
+                    <td class="py-3 px-4">
+                      <form method="POST" action="student_list.php">
+                        <input type="hidden" name="action_type" value="update" />
+                        <input type="hidden" name="assigned_id"
+                          value="<?= htmlspecialchars($student['assigned_id']) ?>" />
+                        <select name="scholarship_id" onchange="this.form.submit()"
+                          class="font-medium rounded-md border px-2 py-1 w-full">
+                          <?php foreach ($scholarships as $sch): ?>
+                            <option value="<?= $sch['id'] ?>" <?= $sch['scholarship_name'] === $student['scholarship_name'] ? 'selected' : '' ?>>
+                              <?= htmlspecialchars($sch['scholarship_name']) ?>
+                            </option>
+                          <?php endforeach; ?>
+                        </select>
+                      </form>
+                    </td>
+                    <?php
+                    $totalMinutes = intval($student['total_minutes'] ?? 0);
+                    $hours = floor($totalMinutes / 60);
+                    $minutes = $totalMinutes % 60;
+                    ?>
+                    <td class="py-3 px-4 font-medium"><?= "{$hours} hrs {$minutes} mins" ?></td>
+                    <td class="py-3 px-1 flex">
+                      <a href="student_list.php?action_type=delete&assigned_id=<?= htmlspecialchars($student['assigned_id']) ?>"
+                        onclick="return confirmDelete('<?= addslashes($fullName) ?>')"
+                        class="bg-red-500 hover:bg-red-600 text-white font-semibold py-2 px-3 rounded-lg text-xs">
+                        Remove
+                      </a>
+                    </td>
+                  </tr>
+                <?php endforeach; ?>
+                <?php if (!$found): ?>
+                  <tr>
+                    <td colspan="6" class="py-3 px-4 text-center text-gray-500">No students found.</td>
+                  </tr>
+                <?php endif; ?>
+              </tbody>
+            </table>
+          </div>
         </div>
       </div>
     </div>

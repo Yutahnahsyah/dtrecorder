@@ -6,7 +6,7 @@ $status_filter = $_GET['status'] ?? '';
 $duty_logs = [];
 
 try {
-$sql = "
+  $sql = "
 SELECT dr.duty_date, dr.time_in, dr.time_out, dr.remarks, dr.status,
        u.student_id, u.first_name, u.middle_name, u.last_name
 FROM duty_requests dr
@@ -113,52 +113,53 @@ ORDER BY dr.duty_date DESC, dr.time_in ASC
 
             <button type="button" onclick="window.location.href='duty_history.php'"
               class="px-4 py-2 rounded-lg text-sm font-semibold bg-gray-300 text-gray-800 hover:bg-gray-400 shadow-md">
-              Clear
+              Default
             </button>
           </form>
         </div>
 
-        <div class="overflow-hidden rounded-xl border">
-          <table class="min-w-full text-sm text-left">
-            <thead class="bg-gray-100 border-b text-gray-600">
-              <tr>
-                <th class="py-3 px-4 font-bold">Student Name</th>
-                <th class="py-3 px-4 font-bold">Student ID</th>
-                <th class="py-3 px-4 font-bold">Date</th>
-                <th class="py-3 px-4 font-bold">Time In</th>
-                <th class="py-3 px-4 font-bold">Time Out</th>
-                <th class="py-3 px-4 font-bold">Task Description</th>
-                <th class="py-3 px-4 font-bold text-center">Status</th>
-              </tr>
-            </thead>
-            <tbody>
-              <?php foreach ($duty_logs as $log): ?>
-                <?php $fullName = htmlspecialchars(trim("{$log['last_name']}, {$log['first_name']}, {$log['middle_name']}")); ?>
-                <tr class="border-b hover:bg-gray-100">
-                  <td class="py-3 px-4 font-medium"><?= $fullName ?></td>
-                  <td class="py-3 px-4 font-medium"><?= htmlspecialchars($log['student_id']) ?></td>
-                  <td class="py-3 px-4 font-medium"><?= htmlspecialchars($log['duty_date']) ?></td>
-                  <td class="py-3 px-4 font-medium"><?= htmlspecialchars($log['time_in']) ?></td>
-                  <td class="py-3 px-4 font-medium"><?= htmlspecialchars($log['time_out']) ?></td>
-                  <td class="py-3 px-4 font-medium"><?= htmlspecialchars($log['remarks']) ?></td>
-                  <td class="py-3 px-4 flex justify-center">
-                    <span
-                      class="px-3 py-1 rounded-full text-xs font-semibold
-                      <?= $log['status'] === 'approved' ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700' ?>">
-                      <?= ucfirst($log['status']) ?>
-                    </span>
-                  </td>
-                </tr>
-              <?php endforeach; ?>
-              <?php if (empty($duty_logs)): ?>
+        <div class="rounded-xl border overflow-hidden">
+          <div class="max-h-[483px] overflow-y-auto">
+            <table class="min-w-full text-sm text-left">
+              <thead class="bg-gray-100 border-b text-gray-600 sticky top-0 z-10">
                 <tr>
-                  <td colspan="7" class="py-3 px-4 text-center text-gray-500">No duty logs found.</td>
+                  <th class="py-3 px-4 font-bold">Student Name</th>
+                  <th class="py-3 px-4 font-bold">Student ID</th>
+                  <th class="py-3 px-4 font-bold">Date</th>
+                  <th class="py-3 px-4 font-bold">Time In</th>
+                  <th class="py-3 px-4 font-bold">Time Out</th>
+                  <th class="py-3 px-4 font-bold">Task Description</th>
+                  <th class="py-3 px-4 font-bold text-center">Status</th>
                 </tr>
-              <?php endif; ?>
-            </tbody>
-          </table>
+              </thead>
+              <tbody>
+                <?php foreach ($duty_logs as $log): ?>
+                  <?php $fullName = htmlspecialchars(trim("{$log['last_name']}, {$log['first_name']}, {$log['middle_name']}")); ?>
+                  <tr class="border-b hover:bg-gray-100">
+                    <td class="py-3 px-4 font-medium"><?= $fullName ?></td>
+                    <td class="py-3 px-4 font-medium"><?= htmlspecialchars($log['student_id']) ?></td>
+                    <td class="py-3 px-4 font-medium"><?= htmlspecialchars($log['duty_date']) ?></td>
+                    <td class="py-3 px-4 font-medium"><?= htmlspecialchars($log['time_in']) ?></td>
+                    <td class="py-3 px-4 font-medium"><?= htmlspecialchars($log['time_out']) ?></td>
+                    <td class="py-3 px-4 font-medium"><?= htmlspecialchars($log['remarks']) ?></td>
+                    <td class="py-3 px-4 flex justify-center">
+                      <span
+                        class="px-3 py-1 rounded-full text-xs font-semibold
+                      <?= $log['status'] === 'approved' ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700' ?>">
+                        <?= ucfirst($log['status']) ?>
+                      </span>
+                    </td>
+                  </tr>
+                <?php endforeach; ?>
+                <?php if (empty($duty_logs)): ?>
+                  <tr>
+                    <td colspan="7" class="py-3 px-4 text-center text-gray-500">No duty logs found.</td>
+                  </tr>
+                <?php endif; ?>
+              </tbody>
+            </table>
+          </div>
         </div>
-
       </div>
     </div>
   </div>
