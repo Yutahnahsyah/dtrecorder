@@ -30,7 +30,7 @@ $approvedCount = $rejectedCount = $pendingCount = 0;
 if (!empty($assignedIds)) {
   $placeholders = implode(',', array_fill(0, count($assignedIds), '?'));
 
-  // Approved
+  // Approved 
   $sqlApproved = "
     SELECT COUNT(*) FROM duty_requests
     WHERE status = 'approved' AND assigned_id IN ($placeholders)

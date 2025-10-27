@@ -22,11 +22,11 @@ try {
 
       // 1. Lookup student_id for display and rejection
       $lookup_sql = "
-SELECT u.student_id
-FROM users_assigned ua
-JOIN users u ON ua.student_id = u.id
-WHERE ua.assigned_id = :assigned_id
-LIMIT 1
+      SELECT u.student_id
+      FROM users_assigned ua
+      JOIN users u ON ua.student_id = u.id
+      WHERE ua.assigned_id = :assigned_id
+      LIMIT 1
       ";
       $stmt_lookup = $pdo->prepare($lookup_sql);
       $stmt_lookup->execute([':assigned_id' => $assigned_id_to_delete]);
@@ -165,70 +165,97 @@ LIMIT 1
     // detect presence of keys (even if empty string was submitted)
     $has_dept_key = array_key_exists('department_id', $_POST);
     $has_sch_key = array_key_exists('scholarship_id', $_POST);
-
+    
     $raw_dept = $has_dept_key ? $_POST['department_id'] : null;
     $raw_sch = $has_sch_key ? $_POST['scholarship_id'] : null;
+    
+    $email_key = array_key_exists('email_address', $_POST);
+    $student_id_key = array_key_exists('student_id', $_POST);
 
+    $email_address = $email_key ? trim($_POST['email_address']) : null;
+    $new_student_id = $student_id_key ? trim($_POST['student_id']) : null;
+    
     // Normalize: explicit empty string => NULL (Unassigned)
     $department_id = ($raw_dept === '' || $raw_dept === null) ? null : intval($raw_dept);
     $scholarship_id = ($raw_sch === '' || $raw_sch === null) ? null : intval($raw_sch);
 
     try {
-      // Update department if the key was present in POST
+      // --- Department ---
       if ($has_dept_key) {
         if ($department_id !== null) {
           $stmt = $pdo->prepare("
-            UPDATE users_info ui
-            JOIN users_assigned ua ON ui.user_id = ua.student_id
-            SET ui.department_id = :dept_id
-            WHERE ua.assigned_id = :assigned_id
-          ");
+        UPDATE users_info ui
+        JOIN users_assigned ua ON ui.user_id = ua.student_id
+        SET ui.department_id = :dept_id
+        WHERE ua.assigned_id = :assigned_id
+      ");
           $stmt->bindValue(':dept_id', $department_id, PDO::PARAM_INT);
           $stmt->bindValue(':assigned_id', $assigned_id, PDO::PARAM_INT);
           $stmt->execute();
           $message = "Department updated successfully.";
         } else {
-          // explicit Unassigned -> set NULL
           $stmt = $pdo->prepare("
-            UPDATE users_info ui
-            JOIN users_assigned ua ON ui.user_id = ua.student_id
-            SET ui.department_id = NULL
-            WHERE ua.assigned_id = :assigned_id
-          ");
+        UPDATE users_info ui
+        JOIN users_assigned ua ON ui.user_id = ua.student_id
+        SET ui.department_id = NULL
+        WHERE ua.assigned_id = :assigned_id
+      ");
           $stmt->execute([':assigned_id' => $assigned_id]);
           $message = "Department set to Unassigned.";
         }
       }
 
-      // Update scholarship if the key was present in POST
+      // --- Scholarship ---
       if ($has_sch_key) {
         if ($scholarship_id !== null) {
           $stmt = $pdo->prepare("
-            UPDATE users_info ui
-            JOIN users_assigned ua ON ui.user_id = ua.student_id
-            SET ui.scholarship_id = :sch_id
-            WHERE ua.assigned_id = :assigned_id
-          ");
+        UPDATE users_info ui
+        JOIN users_assigned ua ON ui.user_id = ua.student_id
+        SET ui.scholarship_id = :sch_id
+        WHERE ua.assigned_id = :assigned_id
+      ");
           $stmt->bindValue(':sch_id', $scholarship_id, PDO::PARAM_INT);
           $stmt->bindValue(':assigned_id', $assigned_id, PDO::PARAM_INT);
           $stmt->execute();
           $message = "Scholarship updated successfully.";
         } else {
-          // explicit Unassigned -> set NULL
           $stmt = $pdo->prepare("
-            UPDATE users_info ui
-            JOIN users_assigned ua ON ui.user_id = ua.student_id
-            SET ui.scholarship_id = NULL
-            WHERE ua.assigned_id = :assigned_id
-          ");
+        UPDATE users_info ui
+        JOIN users_assigned ua ON ui.user_id = ua.student_id
+        SET ui.scholarship_id = NULL
+        WHERE ua.assigned_id = :assigned_id
+      ");
           $stmt->execute([':assigned_id' => $assigned_id]);
           $message = "Scholarship set to Unassigned.";
         }
       }
 
+      // --- Email ---
+      if ($email_key) {
+        $stmt = $pdo->prepare("
+    UPDATE users u
+    JOIN users_assigned ua ON u.id = ua.student_id
+    SET u.email_address = :email
+    WHERE ua.assigned_id = :assigned_id
+  ");
+        $stmt->execute([':email' => $email_address, ':assigned_id' => $assigned_id]);
+        $message = "Email updated successfully.";
+      }
+
+      // --- Student ID ---
+      if ($student_id_key) {
+        $stmt = $pdo->prepare("
+    UPDATE users u
+    JOIN users_assigned ua ON u.id = ua.student_id
+    SET u.student_id = :student_id
+    WHERE ua.assigned_id = :assigned_id
+  ");
+        $stmt->execute([':student_id' => $new_student_id, ':assigned_id' => $assigned_id]);
+        $message = "Student ID updated successfully.";
+      }
+
       header("Location: student_list.php?message=" . urlencode($message));
       exit;
-
     } catch (PDOException $e) {
       error_log("Update Error: " . $e->getMessage());
       $message = "Failed to update student information.";
@@ -245,6 +272,7 @@ LIMIT 1
     u.first_name,
     u.middle_name,
     u.last_name,
+    u.email_address,
     u.student_id,
     ui.department_id,
     ui.scholarship_id,

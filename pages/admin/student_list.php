@@ -87,6 +87,7 @@ $message = $_GET['message'] ?? '';
               <thead class="bg-gray-100 border-b text-gray-600 sticky top-0 z-10">
                 <tr>
                   <th class="py-3 px-4 font-bold">Student Name</th>
+                  <th class="py-3 px-4 font-bold">Email Address</th>
                   <th class="py-3 px-4 font-bold">Student ID</th>
                   <th class="py-3 px-4 font-bold">Department</th>
                   <th class="py-3 px-4 font-bold">Scholarship</th>
@@ -101,19 +102,44 @@ $message = $_GET['message'] ?? '';
                   if (!empty($search_id) && stripos($student['student_id'], $search_id) === false)
                     continue;
                   $found = true;
-                  $fullName = htmlspecialchars(trim("{$student['last_name']}, {$student['first_name']} {$student['middle_name']}"));
+                  $fullName = htmlspecialchars(trim("{$student['last_name']}, {$student['first_name']}, {$student['middle_name']}"));
                   ?>
                   <tr class="border-b hover:bg-gray-100 student-row"
                     data-student-id="<?= htmlspecialchars($student['student_id']) ?>">
                     <td class="py-3 px-4 font-medium"><?= $fullName ?></td>
-                    <td class="py-3 px-4 font-medium"><?= htmlspecialchars($student['student_id']) ?></td>
-                    <td class="py-3 px-4">
+
+                    <!-- Editable Email -->
+                    <td class="py-3 px-2 w-40">
+                      <form method="POST" action="student_list.php">
+                        <input type="hidden" name="action_type" value="update" />
+                        <input type="hidden" name="assigned_id"
+                          value="<?= htmlspecialchars($student['assigned_id']) ?>" />
+                        <input type="text" name="email_address" value="<?= htmlspecialchars($student['email_address']) ?>"
+                          class="font-medium rounded-md border px-2 py-1 w-full text-sm truncate focus:outline-none focus:ring-2 focus:ring-blue-400"
+                          onblur="this.form.submit()" />
+                      </form>
+                    </td>
+
+                    <!-- Editable Student ID -->
+                    <td class="py-3 px-2 w-40">
+                      <form method="POST" action="student_list.php">
+                        <input type="hidden" name="action_type" value="update" />
+                        <input type="hidden" name="assigned_id"
+                          value="<?= htmlspecialchars($student['assigned_id']) ?>" />
+                        <input type="text" name="student_id" value="<?= htmlspecialchars($student['student_id']) ?>"
+                          class="font-medium rounded-md border px-2 py-1 w-full text-sm truncate"
+                          onblur="this.form.submit()" />
+                      </form>
+                    </td>
+
+                    <!-- Department Dropdown -->
+                    <td class="py-3 px-2 w-40">
                       <form method="POST" action="student_list.php">
                         <input type="hidden" name="action_type" value="update" />
                         <input type="hidden" name="assigned_id"
                           value="<?= htmlspecialchars($student['assigned_id']) ?>" />
                         <select name="department_id" onchange="this.form.submit()"
-                          class="font-medium rounded-md border px-2 py-1 w-full">
+                          class="font-medium rounded-md border px-2 py-1 w-full text-sm truncate focus:outline-none focus:ring-2 focus:ring-blue-400">
                           <option value="" <?= !isset($student['department_id']) || $student['department_id'] === null || $student['department_id'] === '' ? 'selected' : '' ?>>Unassigned</option>
                           <?php foreach ($departments as $dept): ?>
                             <option value="<?= $dept['id'] ?>" <?= (string) ($student['department_id'] ?? '') === (string) $dept['id'] ? 'selected' : '' ?>>
@@ -123,13 +149,15 @@ $message = $_GET['message'] ?? '';
                         </select>
                       </form>
                     </td>
-                    <td class="py-3 px-4">
+
+                    <!-- Scholarship Dropdown -->
+                    <td class="py-3 px-2 w-40">
                       <form method="POST" action="student_list.php">
                         <input type="hidden" name="action_type" value="update" />
                         <input type="hidden" name="assigned_id"
                           value="<?= htmlspecialchars($student['assigned_id']) ?>" />
                         <select name="scholarship_id" onchange="this.form.submit()"
-                          class="font-medium rounded-md border px-2 py-1 w-full">
+                          class="font-medium rounded-md border px-2 py-1 w-full text-sm truncate focus:outline-none focus:ring-2 focus:ring-blue-400">
                           <option value="" <?= !isset($student['scholarship_id']) || $student['scholarship_id'] === null || $student['scholarship_id'] === '' ? 'selected' : '' ?>>Unassigned</option>
                           <?php foreach ($scholarships as $sch): ?>
                             <option value="<?= $sch['id'] ?>" <?= (string) ($student['scholarship_id'] ?? '') === (string) $sch['id'] ? 'selected' : '' ?>>
@@ -139,12 +167,16 @@ $message = $_GET['message'] ?? '';
                         </select>
                       </form>
                     </td>
+
+                    <!-- Duty Time -->
                     <?php
                     $totalMinutes = intval($student['total_minutes'] ?? 0);
                     $hours = floor($totalMinutes / 60);
                     $minutes = $totalMinutes % 60;
                     ?>
                     <td class="py-3 px-4 font-medium"><?= "{$hours} hrs {$minutes} mins" ?></td>
+
+                    <!-- Remove Button -->
                     <td class="py-3 px-1 flex">
                       <a href="student_list.php?action_type=delete&assigned_id=<?= htmlspecialchars($student['assigned_id']) ?>"
                         onclick="return confirmDelete('<?= addslashes($fullName) ?>')"
@@ -154,6 +186,7 @@ $message = $_GET['message'] ?? '';
                     </td>
                   </tr>
                 <?php endforeach; ?>
+
                 <?php if (!$found): ?>
                   <tr>
                     <td colspan="6" class="py-3 px-4 text-center text-gray-500">No students found.</td>
@@ -167,34 +200,35 @@ $message = $_GET['message'] ?? '';
     </div>
   </div>
 
-  <script>
-    document.getElementById('searchInput').addEventListener('keypress', function (e) {
-      if (e.key === 'Enter') {
-        e.preventDefault();
-        setAction('search');
-        document.getElementById('studentForm').submit();
-      }
-    });
+</body>
 
-    function setAction(action) {
-      document.getElementById('actionType').value = action;
-      clearMessage();
-    }
-
-    function submitAdd() {
-      setAction('add');
+<script>
+  document.getElementById('searchInput').addEventListener('keypress', function (e) {
+    if (e.key === 'Enter') {
+      e.preventDefault();
+      setAction('search');
       document.getElementById('studentForm').submit();
     }
+  });
 
-    function confirmDelete(studentName) {
-      return confirm(`Are you sure you want to unassign ${studentName}? This action will remove them from your list.`);
-    }
+  function setAction(action) {
+    document.getElementById('actionType').value = action;
+    clearMessage();
+  }
 
-    function clearMessage() {
-      const msg = document.getElementById('feedbackMessage');
-      if (msg) msg.remove();
-    }
-  </script>
-</body>
+  function submitAdd() {
+    setAction('add');
+    document.getElementById('studentForm').submit();
+  }
+
+  function confirmDelete(studentName) {
+    return confirm(`Are you sure you want to unassign ${studentName}? This action will remove them from your list.`);
+  }
+
+  function clearMessage() {
+    const msg = document.getElementById('feedbackMessage');
+    if (msg) msg.remove();
+  }
+</script>
 
 </html>
