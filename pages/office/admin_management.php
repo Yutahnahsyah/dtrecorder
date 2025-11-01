@@ -74,6 +74,7 @@ require_once __DIR__ . '/../../includes/auth_admin.php';
         </form>
       </div>
     </div>
+    
   </div>
 </body>
 

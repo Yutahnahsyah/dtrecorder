@@ -96,6 +96,9 @@ if (!empty($assignedIds)) {
     </div>
 
     <div class="flex-1 p-8 overflow-y-auto">
+      <h1 class="text-2xl font-bold mb-4">Welcome, <?php echo htmlspecialchars($logged_in_admin); ?> 👋</h1>
+      <p class="text-gray-600 mb-8">Here’s your duty overview and recent updates.</p>
+
       <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-10">
         <div class="bg-white p-6 rounded-xl shadow-sm border-l-4 border-purple-500">
           <h3 class="text-gray-500 text-sm font-semibold">Active Student Count</h3>
