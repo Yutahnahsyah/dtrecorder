@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Oct 16, 2025 at 04:13 AM
+-- Generation Time: Nov 03, 2025 at 12:35 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -30,16 +30,23 @@ SET time_zone = "+00:00";
 CREATE TABLE `admins` (
   `id` int(11) NOT NULL,
   `username` varchar(255) NOT NULL,
-  `password` varchar(255) NOT NULL
+  `password` varchar(255) NOT NULL,
+  `category` enum('office','personnel') NOT NULL DEFAULT 'personnel'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `admins`
 --
 
-INSERT INTO `admins` (`id`, `username`, `password`) VALUES
-(1, 'CITE OFFICE', 'CITE'),
-(2, 'JJ Narvasa', 'Narvasa123');
+INSERT INTO `admins` (`id`, `username`, `password`, `category`) VALUES
+(1, 'CAHS OFFICE', 'CAHS', 'office'),
+(2, 'CEA OFFICE', 'CEA', 'office'),
+(3, 'CITE OFFICE', 'CITE', 'office'),
+(4, 'CMA OFFICE', 'CMA', 'office'),
+(5, 'CELA OFFICE', 'CELA', 'office'),
+(6, 'CCJE OFFICE', 'CCJE', 'office'),
+(7, 'CAS OFFICE', 'CAS', 'office'),
+(8, 'Professor', 'Prof', 'personnel');
 
 -- --------------------------------------------------------
 
@@ -82,6 +89,30 @@ CREATE TABLE `duty_logs` (
   `logged_at` datetime DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+--
+-- Dumping data for table `duty_logs`
+--
+
+INSERT INTO `duty_logs` (`id`, `assigned_id`, `duty_date`, `time_in`, `time_out`, `remarks`, `approved_by`, `logged_at`) VALUES
+(19, 5, '2025-10-17', '20:46:00', '20:47:00', 'CAHS', 1, '2025-10-17 20:49:40'),
+(20, 6, '2025-10-17', '20:47:00', '20:48:00', 'Test', NULL, '2025-10-17 20:55:16'),
+(21, 5, '2025-10-17', '20:55:00', '20:56:00', 'Test', 1, '2025-10-17 20:55:58'),
+(22, 5, '2025-10-17', '22:34:00', '22:36:00', 'Cahs 2 mins', 1, '2025-10-17 22:34:37'),
+(23, 8, '2025-10-17', '22:36:00', '22:38:00', 'test 2 mins', NULL, '2025-10-17 22:36:08'),
+(24, 5, '2025-10-17', '22:45:00', '23:45:00', 'test cahs', 1, '2025-10-17 22:46:04'),
+(25, 5, '2025-10-18', '06:02:00', '07:02:00', '1 hour test now', 1, '2025-10-18 06:03:11'),
+(26, 5, '2025-10-18', '13:35:00', '20:35:00', 'try', 1, '2025-10-18 13:35:44'),
+(27, 5, '2025-10-18', '13:36:00', '13:37:00', 'ret', 1, '2025-10-18 17:36:56'),
+(28, 5, '2025-10-18', '17:36:00', '17:37:00', 'asd', 1, '2025-10-18 17:36:56'),
+(29, 5, '2025-11-07', '17:37:00', '17:39:00', 'asd', 1, '2025-10-18 17:37:16'),
+(30, 5, '2025-10-08', '17:40:00', '17:39:00', 'asdasd', 1, '2025-10-18 17:37:17'),
+(31, 5, '3123-12-31', '12:31:00', '12:31:00', '123123', 1, '2025-10-24 07:55:42'),
+(32, 5, '3123-12-31', '12:31:00', '12:31:00', '123123123123123', 1, '2025-10-24 07:56:40'),
+(33, 5, '4444-04-04', '16:44:00', '12:31:00', '44444412243', 1, '2025-10-25 21:13:27'),
+(34, 5, '3123-12-31', '12:31:00', '15:12:00', '123123123123', 1, '2025-10-25 21:13:51'),
+(35, 10, '2025-10-25', '21:14:00', '21:14:00', 'Check', 1, '2025-10-25 21:15:05'),
+(36, 11, '2025-10-25', '21:46:00', '21:47:00', 'Test', NULL, '2025-10-25 21:47:00');
+
 -- --------------------------------------------------------
 
 --
@@ -106,16 +137,40 @@ CREATE TABLE `duty_requests` (
 --
 
 INSERT INTO `duty_requests` (`id`, `assigned_id`, `duty_date`, `time_in`, `time_out`, `remarks`, `status`, `submitted_at`, `reviewed_at`, `reviewed_by`) VALUES
-(1, 1, '2025-10-14', '08:00:00', '11:00:00', 'Library shelf labeling', 'pending', '2025-10-16 10:13:09', NULL, NULL),
-(2, 1, '2025-10-16', '09:30:00', '12:30:00', 'Assisted with book returns', 'pending', '2025-10-16 10:13:09', NULL, NULL),
-(3, 2, '2025-10-15', '10:00:00', '13:00:00', 'Inventory check in science lab', 'pending', '2025-10-16 10:13:09', NULL, NULL),
-(4, 2, '2025-10-17', '08:30:00', '11:30:00', 'Helped organize lab equipment', 'pending', '2025-10-16 10:13:09', NULL, NULL),
-(5, 3, '2025-10-14', '13:00:00', '16:00:00', 'Assisted in guidance office filing', 'pending', '2025-10-16 10:13:09', NULL, NULL),
-(6, 3, '2025-10-18', '09:00:00', '12:00:00', 'Helped with student ID distribution', 'pending', '2025-10-16 10:13:09', NULL, NULL),
-(7, 4, '2025-10-15', '07:30:00', '10:30:00', 'Cleaned and arranged sports equipment', 'pending', '2025-10-16 10:13:09', NULL, NULL),
-(8, 4, '2025-10-19', '10:00:00', '13:00:00', 'Assisted during PE class setup', 'pending', '2025-10-16 10:13:09', NULL, NULL),
-(9, 5, '2025-10-16', '14:00:00', '17:00:00', 'Helped decorate bulletin boards', 'pending', '2025-10-16 10:13:09', NULL, NULL),
-(10, 5, '2025-10-20', '08:00:00', '11:00:00', 'Assisted in art room cleanup', 'pending', '2025-10-16 10:13:09', NULL, NULL);
+(38, 5, '2025-10-17', '20:46:00', '20:47:00', 'CAHS', 'approved', '2025-10-17 20:47:04', '2025-10-17 20:49:40', 1),
+(39, 6, '2025-10-17', '20:47:00', '20:48:00', 'Test', 'approved', '2025-10-17 20:47:57', '2025-10-17 20:55:16', NULL),
+(40, 7, '2025-10-17', '20:48:00', '20:49:00', 'TestTestTest', 'pending', '2025-10-17 20:48:24', NULL, NULL),
+(41, 5, '2025-10-17', '20:55:00', '20:56:00', 'Test', 'approved', '2025-10-17 20:55:40', '2025-10-17 20:55:58', 1),
+(42, 5, '2025-10-17', '20:57:00', '20:58:00', 'Test', 'rejected', '2025-10-17 20:55:49', '2025-10-17 20:56:01', 1),
+(43, 5, '2025-10-17', '22:34:00', '22:36:00', 'Cahs 2 mins', 'approved', '2025-10-17 22:34:22', '2025-10-17 22:34:37', 1),
+(44, 8, '2025-10-17', '22:36:00', '22:38:00', 'test 2 mins', 'approved', '2025-10-17 22:35:49', '2025-10-17 22:36:08', NULL),
+(45, 5, '2025-10-17', '22:45:00', '23:45:00', 'test cahs', 'approved', '2025-10-17 22:45:48', '2025-10-17 22:46:04', 1),
+(46, 5, '2025-10-18', '06:02:00', '07:02:00', '1 hour test now', 'approved', '2025-10-18 06:03:04', '2025-10-18 06:03:11', 1),
+(47, 5, '2025-10-18', '13:35:00', '20:35:00', 'try', 'approved', '2025-10-18 13:35:36', '2025-10-18 13:35:44', 1),
+(48, 5, '2025-10-18', '13:36:00', '13:37:00', 'ret', 'approved', '2025-10-18 13:36:14', '2025-10-18 17:36:56', 1),
+(49, 5, '2025-10-18', '17:36:00', '17:37:00', 'asd', 'approved', '2025-10-18 17:36:49', '2025-10-18 17:36:56', 1),
+(50, 5, '2025-11-07', '17:37:00', '17:39:00', 'asd', 'approved', '2025-10-18 17:37:06', '2025-10-18 17:37:16', 1),
+(51, 5, '2025-10-08', '17:40:00', '17:39:00', 'asdasd', 'approved', '2025-10-18 17:37:13', '2025-10-18 17:37:17', 1),
+(52, 5, '2025-10-24', '07:51:00', '07:52:00', 'Test', 'rejected', '2025-10-24 07:51:25', '2025-10-27 17:47:24', 1),
+(53, 5, '2025-10-24', '07:53:00', '07:55:00', 'Test', 'rejected', '2025-10-24 07:52:01', '2025-10-27 17:47:24', 1),
+(54, 5, '2025-10-28', '11:52:00', '07:56:00', 'Test', 'rejected', '2025-10-24 07:52:09', '2025-10-27 17:47:24', 1),
+(55, 5, '2025-10-24', '07:56:00', '11:54:00', 'Cadawd', 'rejected', '2025-10-24 07:54:19', '2025-10-27 17:47:24', 1),
+(56, 5, '2025-10-16', '07:58:00', '00:54:00', 'Tadawdawd', 'rejected', '2025-10-24 07:54:37', '2025-10-27 17:47:24', 1),
+(57, 5, '2025-10-24', '07:54:00', '07:57:00', 'Tawdawd', 'rejected', '2025-10-24 07:54:43', '2025-10-27 17:47:24', 1),
+(58, 5, '2025-10-24', '07:59:00', '11:55:00', 'awdawd', 'rejected', '2025-10-24 07:55:06', '2025-10-27 17:47:24', 1),
+(59, 5, '2025-10-31', '12:31:00', '12:31:00', '123123123', 'rejected', '2025-10-24 07:55:19', '2025-10-27 17:47:24', 1),
+(60, 5, '3123-12-31', '12:31:00', '12:31:00', '123123', 'approved', '2025-10-24 07:55:22', '2025-10-24 07:55:42', 1),
+(61, 5, '3123-12-31', '23:23:00', '12:31:00', '123123123', 'rejected', '2025-10-24 07:55:27', '2025-10-24 08:01:16', 1),
+(62, 5, '3123-12-31', '12:31:00', '12:31:00', '123123123123123', 'approved', '2025-10-24 07:55:35', '2025-10-24 07:56:40', 1),
+(63, 5, '3123-12-31', '12:31:00', '15:12:00', '123123123123', 'approved', '2025-10-24 08:01:31', '2025-10-25 21:13:51', 1),
+(64, 5, '3321-12-31', '12:33:00', '04:12:00', '541243', 'rejected', '2025-10-24 08:01:37', '2025-10-25 21:13:44', 1),
+(65, 5, '4444-04-04', '16:44:00', '12:31:00', '44444412243', 'approved', '2025-10-24 08:01:48', '2025-10-25 21:13:27', 1),
+(66, 10, '2025-10-25', '21:14:00', '21:14:00', 'Check', 'approved', '2025-10-25 21:14:57', '2025-10-25 21:15:05', 1),
+(67, 6, '2025-10-25', '21:45:00', '21:46:00', 'Test', 'rejected', '2025-10-25 21:45:34', '2025-10-25 21:45:39', NULL),
+(68, 11, '2025-10-25', '21:46:00', '21:47:00', 'Test', 'approved', '2025-10-25 21:46:55', '2025-10-25 21:47:00', NULL),
+(69, 11, '2025-10-25', '21:47:00', '21:49:00', 'Test 2', 'rejected', '2025-10-25 21:47:28', '2025-10-25 21:47:35', NULL),
+(70, 12, '2025-10-25', '22:57:00', '22:58:00', 'Nigga test 1', 'approved', '2025-10-25 22:57:29', '2025-10-25 22:57:57', NULL),
+(71, 5, '2025-10-30', '08:25:00', '08:26:00', 'Test', 'pending', '2025-10-30 08:25:54', NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -162,11 +217,11 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`id`, `first_name`, `middle_name`, `last_name`, `email_address`, `student_id`, `created_at`, `password_hash`, `reset_token_hash`, `reset_token_expiration`) VALUES
-(1, 'Carl Elijah Ron', 'Cayabyab', 'Canullas', 'caca.canullas.up@phinmaed.com', '03-01-2425-041045', '2025-10-16 06:13:03', '$2y$10$/qO5DIugElVIbDNzRJSawuS6bsyQooO3XDwju/tHWLEaTpA1/6Wcu', NULL, NULL),
+(1, 'Carl Elijah Ron', 'Cayabyab', 'Canullas', 'test@phinmaed.com', '03-01-2425-041045', '2025-10-16 06:13:03', '$2y$10$NwLxsA9fAG8ZannYKJhLK.0pKWibqSU9WQDquq9jJFxgXMbuhiZk6', NULL, NULL),
 (2, 'Arceli', 'Viernes', 'Mapili', 'arvi.mapili.up@phinmaed.com', '03-01-2425-043344', '2025-10-16 09:58:56', '$2y$10$QT796RCm/OQ9UBfj4YRdwO6NM6SQd6CwvULRe1jq04R53mg7w2Qry', NULL, NULL),
 (3, 'Jeverlee', 'Resonable', 'Naron', 'jere.naron.up@phinmaed.com', '03-01-2425-045551', '2025-10-16 10:00:26', '$2y$10$ufkk45PnsJuvGQGBANtS7.HC/LUMFUk926cSOgnwvhGNKHriKbwHq', NULL, NULL),
 (4, 'Miguel', 'Galpao', 'Nasurada', 'miga.nasurada.up@phinmaed.com', '03-01-2425-449255', '2025-10-16 10:01:15', '$2y$10$uKU0LWMHToNe1AgmPBd2xOc12MbEWx9KBucMOgy7QvMbs9SQNc5Q.', NULL, NULL),
-(5, 'Junald', 'Sapiera', 'Valencia', 'unsa.valencia.up@phinmaed.com', '03-01-2425-040144', '2025-10-16 10:02:32', '$2y$10$ebzBiK.Pnz2zyNha34Ne7.3E2T3qn5GbL.49HWiPiGeDMIjvQcssq', NULL, NULL);
+(5, 'Junald', 'Sapiera', 'Valencia', 'unsa.valencia.up@phinmaed.com', '03-01-2425-040144', '2025-10-16 10:02:32', '$2y$10$ebzBiK.Pnz2zyNha34Ne7.3E2T3qn5GbL.49HWiPiGeDMIjvQcssq', '82dd598297412a9019e2722e6e740347236a414d31357c40c33d53beae2b217f', '2025-10-17 22:06:31');
 
 -- --------------------------------------------------------
 
@@ -178,19 +233,16 @@ CREATE TABLE `users_assigned` (
   `assigned_id` int(11) NOT NULL,
   `admin_id` int(11) NOT NULL,
   `student_id` bigint(20) NOT NULL,
-  `assigned_at` datetime DEFAULT current_timestamp()
+  `assigned_at` datetime DEFAULT current_timestamp(),
+  `is_active` tinyint(1) DEFAULT 1
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `users_assigned`
 --
 
-INSERT INTO `users_assigned` (`assigned_id`, `admin_id`, `student_id`, `assigned_at`) VALUES
-(1, 1, 1, '2025-10-16 06:13:29'),
-(2, 1, 2, '2025-10-16 10:04:27'),
-(3, 1, 3, '2025-10-16 10:04:33'),
-(4, 1, 4, '2025-10-16 10:04:38'),
-(5, 1, 5, '2025-10-16 10:04:42');
+INSERT INTO `users_assigned` (`assigned_id`, `admin_id`, `student_id`, `assigned_at`, `is_active`) VALUES
+(5, 1, 1, '2025-10-30 08:24:50', 1);
 
 -- --------------------------------------------------------
 
@@ -209,8 +261,8 @@ CREATE TABLE `users_info` (
 --
 
 INSERT INTO `users_info` (`user_id`, `department_id`, `scholarship_id`) VALUES
-(1, 3, 2),
-(2, 3, 4),
+(1, 3, 1),
+(2, 1, 1),
 (3, 3, 4),
 (4, 3, 1),
 (5, 3, 3);
@@ -289,7 +341,7 @@ ALTER TABLE `users_info`
 -- AUTO_INCREMENT for table `admins`
 --
 ALTER TABLE `admins`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
 
 --
 -- AUTO_INCREMENT for table `departments`
@@ -301,13 +353,13 @@ ALTER TABLE `departments`
 -- AUTO_INCREMENT for table `duty_logs`
 --
 ALTER TABLE `duty_logs`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=38;
 
 --
 -- AUTO_INCREMENT for table `duty_requests`
 --
 ALTER TABLE `duty_requests`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=72;
 
 --
 -- AUTO_INCREMENT for table `scholarship_types`
@@ -325,7 +377,7 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT for table `users_assigned`
 --
 ALTER TABLE `users_assigned`
-  MODIFY `assigned_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `assigned_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
 
 --
 -- Constraints for dumped tables
@@ -335,14 +387,12 @@ ALTER TABLE `users_assigned`
 -- Constraints for table `duty_logs`
 --
 ALTER TABLE `duty_logs`
-  ADD CONSTRAINT `duty_logs_ibfk_1` FOREIGN KEY (`assigned_id`) REFERENCES `users_assigned` (`assigned_id`) ON DELETE CASCADE,
   ADD CONSTRAINT `duty_logs_ibfk_2` FOREIGN KEY (`approved_by`) REFERENCES `admins` (`id`) ON DELETE SET NULL;
 
 --
 -- Constraints for table `duty_requests`
 --
 ALTER TABLE `duty_requests`
-  ADD CONSTRAINT `duty_requests_ibfk_1` FOREIGN KEY (`assigned_id`) REFERENCES `users_assigned` (`assigned_id`) ON DELETE CASCADE,
   ADD CONSTRAINT `duty_requests_ibfk_2` FOREIGN KEY (`reviewed_by`) REFERENCES `admins` (`id`) ON DELETE SET NULL;
 
 --
