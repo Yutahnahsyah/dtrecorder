@@ -11,7 +11,7 @@ The primary goal of DTRecorder is to offer a simple, efficient, and reliable way
 # How to Run this Project
 This project runs using Live Server extension for VSCode and the Live Server chromium extension for your respective browser.
 
-# User Credentials
+# Credentials
 Admins Username and Password
 CAHS OFFICE | CAHS
 CEA OFFICE | CEA
